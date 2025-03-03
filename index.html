@@ -27,10 +27,10 @@ body {
 }
 
 .container {
-    position: absolute; /* Added for perfect centering */
-    top: 50%; /* Added for perfect centering */
-    left: 50%; /* Added for perfect centering */
-    transform: translate(-50%, -50%); /* Added for perfect centering */
+    position: relative; /* Changed from absolute to fix modal z-index issue */
+    top: 0; /* Removed absolute positioning */
+    left: 0; /* Removed absolute positioning */
+    transform: none; /* Removed absolute positioning */
     background: rgba(26, 42, 108, 0.85);
     backdrop-filter: blur(10px);
     padding: 2rem;
@@ -39,6 +39,7 @@ body {
     text-align: center;
     max-width: 800px;
     width: 90%;
+    margin: 0 auto; /* Added for centering */
 }
 
 .subtitle {
@@ -118,8 +119,10 @@ button:hover {
 }
 
 @keyframes celebrate {
-    0% { transform: scale(1) translate(-50%, -50%); }
-    50% { transform: scale(1.1) translate(-50%, -50%); }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+} /* Fixed missing closing brace */
 
 .celebrate {
     animation: celebrate 0.5s ease-in-out;
@@ -135,7 +138,7 @@ button:hover {
     background: rgba(0, 0, 0, 0.8);
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 1000; /* Explicitly set high z-index to ensure visibility */
 }
 
 .modal-content {
@@ -146,6 +149,7 @@ button:hover {
     color: black;
     max-width: 500px;
     width: 90%;
+    z-index: 1001; /* Ensure content is above modal background */
 }
 
 .modal-content img {
@@ -196,50 +200,50 @@ const sentences = [
     "Let's begin with a brief introduction to our topic.",  
     "Today, I will discuss the key aspects of our project.",  
     "First, let's take a look at the agenda.",  
-    "I’d like to start with a quick overview of the main points.",  
+    "I'd like to start with a quick overview of the main points.",  
     "This presentation will cover three main topics.",  
-    "Let’s dive into the first point.",  
-    "To begin, let’s consider the background of this issue.",  
+    "Let's dive into the first point.",  
+    "To begin, let's consider the background of this issue.",  
     "Now, let's move on to the next topic.",  
     "Here is a key statistic to consider.",  
     "As you can see from this slide, the data is quite revealing.",  
     "This chart illustrates the trends over the past five years.",  
     "Allow me to elaborate on this point.",  
-    "Let’s take a moment to analyze these findings.",  
-    "I’d like to highlight an important aspect of this issue.",  
+    "Let's take a moment to analyze these findings.",  
+    "I'd like to highlight an important aspect of this issue.",  
     "One important factor to consider is the following.",  
-    "Now, let’s explore the implications of these results.",  
+    "Now, let's explore the implications of these results.",  
     "This brings us to our next key takeaway.",  
     "Let me provide a real-life example.",  
-    "Here’s a case study that supports our argument.",  
+    "Here's a case study that supports our argument.",  
     "Consider this scenario for a better understanding.",  
-    "Let’s take a quick poll to gauge your thoughts.",  
+    "Let's take a quick poll to gauge your thoughts.",  
     "Does anyone have any questions so far?",  
-    "I’ll be happy to clarify any points if needed.",  
-    "Let’s summarize what we’ve covered so far.",  
+    "I'll be happy to clarify any points if needed.",  
+    "Let's summarize what we've covered so far.",  
     "Before we move forward, let's review the key takeaways.",  
-    "I’d like to emphasize an essential point.",  
+    "I'd like to emphasize an essential point.",  
     "It is important to note that this trend is increasing.",  
-    "Now, let’s look at possible solutions to this issue.",  
+    "Now, let's look at possible solutions to this issue.",  
     "Here are some recommendations based on our findings.",  
     "Our research suggests the following best practices.",  
-    "Let’s discuss the challenges and limitations of this approach.",  
+    "Let's discuss the challenges and limitations of this approach.",  
     "We must consider both the benefits and risks.",  
-    "Let’s compare this approach to alternative methods.",  
+    "Let's compare this approach to alternative methods.",  
     "The next step is implementing these strategies effectively.",  
-    "Before we conclude, I’d like to address a common concern.",  
-    "Now, let’s take a look at the future implications.",  
-    "To wrap things up, let’s go over the key points.",  
+    "Before we conclude, I'd like to address a common concern.",  
+    "Now, let's take a look at the future implications.",  
+    "To wrap things up, let's go over the key points.",  
     "In conclusion, our findings highlight the importance of this topic.",  
     "I hope this presentation has provided valuable insights.",  
     "Thank you for your attention and participation.",  
     "I appreciate your time and interest in this subject.",  
-    "Now, I’d like to open the floor for questions.",  
+    "Now, I'd like to open the floor for questions.",  
     "If you have any questions, feel free to ask.",  
-    "I’d be happy to discuss any points further.",  
+    "I'd be happy to discuss any points further.",  
     "Your feedback and thoughts are greatly appreciated.",  
     "Please feel free to reach out if you need more information.",  
-    "Let’s continue this discussion beyond today’s session.",  
+    "Let's continue this discussion beyond today's session.",  
     "Once again, thank you for joining me today.",  
     "I look forward to your insights and contributions."  
 ];  
