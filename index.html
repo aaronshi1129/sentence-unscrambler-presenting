@@ -1,222 +1,353 @@
-<html><head><base href=".">
+<!DOCTYPE html>
+<html>
+<head>
+<base href="">
+<meta charset="UTF-8">
+<title>Sentence Unscrambler</title>
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    margin: 0;
-    background: white;
+    background-image: url('https://alittlemoreenglish.weebly.com/uploads/2/6/6/3/26638990/gradient-background-soft-colors-blueish-cloud-sky_orig.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
     padding: 20px;
-  }
+}
 
-  .container {
-    background: white;
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(26, 42, 108, 0.85);
+    backdrop-filter: blur(10px);
     padding: 2rem;
     border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    text-align: center;
     max-width: 800px;
     width: 90%;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    text-align: center;
-  }
+}
 
-  .sentence {
-    font-size: 1.2rem;
-    margin: 20px 0;
-    line-height: 1.6;
-    color: #2c3e50;
-    min-height: 80px;
+.subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.scrambled-words {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
     justify-content: center;
-  }
+    margin: 20px 0;
+}
 
-  button {
-    background: #3498db;
-    color: white;
+.word {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    user-select: none;
+}
+
+.word:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.word.selected {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(0.95);
+}
+
+.answer-area {
+    min-height: 50px;
+    margin: 20px 0;
+    padding: 10px;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+button {
+    background: rgba(255, 255, 255, 0.2);
     border: none;
-    padding: 12px 24px;
-    border-radius: 25px;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 1rem;
-    transition: transform 0.2s, background 0.2s;
+    transition: all 0.3s;
     margin: 5px;
-  }
+}
 
-  button:hover:not(:disabled) {
-    background: #2980b9;
-    transform: scale(1.05);
-  }
+button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
 
-  button:disabled {
-    background: #bdc3c7;
+button:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
     transform: none;
-  }
+}
 
-  .button-group {
+button.active {
+    background: rgba(46, 204, 113, 0.4); /* Green background for active state */
+}
+
+.score {
+    font-size: 1.2rem;
+    margin: 20px 0;
+}
+
+.feedback {
+    height: 30px;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.control-buttons {
     display: flex;
     gap: 10px;
     justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .input-area {
-    margin: 20px 0;
-    width: 100%;
-  }
-
-  #userInput {
-    width: 90%;
-    padding: 12px;
-    font-size: 1rem;
-    border: 2px solid #3498db;
-    border-radius: 8px;
-    margin: 10px 0;
-  }
-
-  #userInput:disabled {
-    background-color: #f8f9fa;
-    border-color: #bdc3c7;
-    cursor: not-allowed;
-  }
-
-  .feedback {
-    font-size: 1.1rem;
-    margin: 15px 0;
-    font-weight: bold;
-    min-height: 24px;
-  }
-
-  .correct {
-    color: #27ae60;
-  }
-
-  .incorrect {
-    color: #e74c3c;
-  }
-
-  .disclaimer {
-    font-size: 0.9rem;
-    color: #7f8c8d;
     margin-top: 20px;
-    font-style: italic;
-  }
+}
 
-  .score-display {
-    font-size: 1.1rem;
-    color: #34495e;
-    margin: 10px 0;
-    padding: 8px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
-  }
-
-  #correctScore {
-    color: #27ae60;
-    font-weight: bold;
-  }
-
-  #percentageScore {
-    color: #2980b9;
-    font-weight: bold;
-  }
-
-  .answer-display {
-    font-size: 1.1rem;
-    margin: 15px 0;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
-    color: #2c3e50;
+.directions {
     display: none;
-  }
+    margin: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    text-align: left;
+}
 
-  .answer-display.show {
-    display: block;
-  }
+/* Speech button styles */
+#speakSentenceButton {
+    background: rgba(52, 152, 219, 0.4);
+}
 
-  .pokemon-modal {
+#speakSentenceButton:hover {
+    background: rgba(52, 152, 219, 0.6);
+}
+
+#ttsToggle {
+    transition: all 0.3s;
+}
+
+#ttsToggle.active {
+    background: rgba(46, 204, 113, 0.4);
+}
+
+/* Settings Modal Styles */
+.modal {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;  /* Changed to white background */
+    padding: 2rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    color: #333333;  /* Dark gray text for better contrast */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.setting-group {
+    margin-bottom: 1.5rem;
+}
+
+.setting-group h2 {
+    color: #1a2a6c;  /* Dark blue heading */
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.setting-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: #1a2a6c;  /* Dark blue labels */
+    font-weight: 600;
+}
+
+.settings-select {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;  /* Light gray border */
+    background: #ffffff;
+    color: #333333;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.settings-select:focus {
+    border-color: #3498db; 
+    outline: none;
+}
+
+.settings-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    background: #ffffff;
+    color: #333333;
+    font-size: 1rem;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.settings-textarea:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.settings-textarea::placeholder {
+    color: #999999;  /* Medium gray placeholder text */
+}
+
+.settings-buttons {
     display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+.settings-button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+#saveSettings {
+    background: #3498db;
+    color: white;
+    padding: 0.8rem 2rem;
+}
+
+#saveSettings:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+#closeSettings {
+    background: #e0e0e0;
+    color: #333333;
+}
+
+#closeSettings:hover {
+    background: #d0d0d0;
+    transform: translateY(-2px);
+}
+
+.settings-select:hover,
+.settings-textarea:hover {
+    border-color: #3498db;
+}
+
+.settings-select.error,
+.settings-textarea.error {
+    border-color: #e74c3c;
+}
+
+.settings-select.success,
+.settings-textarea.success {
+    border-color: #2ecc71;
+}
+
+#victoryModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-  }
+}
 
-  .pokemon-modal-content {
-    background: white;
+#victoryModal .modal-content {
+    background: #ffffff;
     padding: 2rem;
     border-radius: 15px;
     text-align: center;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    animation: modalPop 0.3s ease-out;
-  }
+    color: #333333;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
 
-  @keyframes modalPop {
-    0% {
-      transform: scale(0.8);
-      opacity: 0;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
+#victoryModal h2 {
+    color: #1a2a6c;
+    margin-bottom: 1rem;
+}
 
-  .pokemon-image {
-    margin: 20px 0;
-    max-width: 200px;
-    height: auto;
-    animation: bounce 1s ease infinite;
-  }
+#victoryModal p {
+    margin-bottom: 1.5rem;
+}
 
-  @keyframes bounce {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
+#victoryModal img {
+    margin-bottom: 1.5rem;
+}
 
-  .continue-btn {
+#victoryModal button {
     background: #3498db;
     color: white;
+    padding: 0.8rem 2rem;
     border: none;
-    padding: 12px 24px;
-    border-radius: 25px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
-    transition: transform 0.2s, background 0.2s;
-    margin-top: 20px;
-  }
+    transition: all 0.3s ease;
+}
 
-  .continue-btn:hover {
+#victoryModal button:hover {
     background: #2980b9;
-    transform: scale(1.05);
-  }
+    transform: translateY(-2px);
 
-  .disclaimer a {
-    color: white;
-    text-decoration: none; /
+.author-info a {
+    color: white; 
+    text-decoration: none; 
     transition: color 0.3s ease; 
 }
 
-.disclaimer a:hover {
-    color: blue; 
+.author-info a:hover {
+    color: lightblue; 
+}
 }
 </style>
 </head>
@@ -231,229 +362,70 @@
 </script>
 <body>
 <div class="container">
-  <h1>Listening Dictation (Presentation)</h1>
-    <p class="subtitle">Finish 5 tasks correctly and earn a Pokemon!</p>
-  <div class="score-display">
-    Score: <span id="correctScore">0</span> correct / <span id="totalAttempts">0</span> attempts 
-    (<span id="percentageScore">0</span>%)
-  </div>
-  <div class="button-group">
-    <button onclick="speakSentence()">
-      <span>🔊 Read Aloud</span>
+    <h1>Sentence Unscrambler</h1>
+    <p class="subtitle">Finish 5 sentence unscrambling tasks and earn a Pokemon!</p>
+    <p class="score">Score: <span id="score">0</span></p>
+    <div class="feedback" id="feedback"></div>
+    <div class="scrambled-words" id="scrambledWords"></div>
+    <div class="answer-area" id="answerArea"></div>
+    <button id="startButton">Start</button>
+    <button id="checkButton" style="display: none;">Check Answer</button>
+    <button id="skipButton" style="display: none;">Skip This Sentence</button>
+    <button id="nextSentenceButton" style="display: none;">Next Sentence</button>
+    <button id="speakSentenceButton" style="display: none;">
+        <span>🔊 Read Sentence</span>
     </button>
-  </div>
-  <div class="input-area">
-    <input type="text" 
-           id="userInput" 
-           placeholder="Type what you hear..."
-           onkeypress="if(event.key === 'Enter') checkAnswer()">
-  </div>
-  <div id="feedback" class="feedback"></div>
-  <div id="answerDisplay" class="answer-display"></div>
-  <div class="button-group">
-    <button onclick="generateSentence()">Get New Sentence</button>
-    <button id="checkBtn" onclick="checkAnswer()">Check Answer</button>
-    <button onclick="showAnswer()">Show Answer</button>
-  </div>
-  <p class="disclaimer">
-    The sentences are used to practice English listening and writing.
-  </p>
-  <p class="disclaimer" style="margin-bottom: 0; font-style: normal;">
-    <a href="https://www.aaronshi.cc" target="_blank" rel="noopener noreferrer">Go to AaronShi.cc</a> | <a href="https://app.aaronshi.cc" target="_blank" rel="noopener noreferrer">Back to AaronShi.cc App</a>
-  </p>
+    <div class="control-buttons">
+        <button id="settingsButton">Settings</button>
+        <button id="directionsButton">Directions</button>
+        <button id="ttsToggle">Voice: OFF</button>
+    </div>
+    <div class="directions" id="directions">
+        <h3>How to Play:</h3>
+        <p>1. Click on words in any order to construct the original sentence.</p>
+        <p>2. Click Check Answer to verify your solution.</p>
+        <p>3. Complete 5 sentences correctly to win a Pokemon!</p>
+        <p>4. Use Settings to customize your own sentence bank.</p>
+        <p>5. Toggle Voice ON to hear words as you click them.</p>
+        <p>6. After correctly completing a sentence, use the Read Sentence button to hear the full sentence.</p>
+    </div>
+
+    <div class="author-info">
+    <a href="https://www.aaronshi.cc" target="_blank" rel="noopener noreferrer">Go to AaronShi.cc</a>
+    |<a href="https://app.aaronshi.cc" target="_blank" rel="noopener noreferrer">Back to AaronShi.cc App</a>
+        </div>
 </div>
 
-<script>
-const POKEMON_COUNT = 151; // Number of original Pokemon
-let fiveCorrectCounter = 0; // Track progress towards 5 correct answers
-let hasAnsweredCorrectly = false; // Track if current sentence was answered correctly
-const templates = [
-  "Good morning, everyone. Thank you for being here today.",
-  "Let's begin by outlining the key objectives of today's presentation.",
-  "I'll start by giving you an overview of the topic, followed by some in-depth analysis.",
-  "As you can see in this chart, the data clearly shows a trend towards increased growth.",
-  "I'd like to highlight some key points before we dive into the details.",
-  "If you have any questions during the presentation, please feel free to ask.",
-  "Now, let's take a closer look at the findings from our latest research.",
-  "I'll be discussing three main areas in this presentation: first, the background; second, the methodology; and finally, the conclusions.",
-  "I'd like to bring your attention to the slide in front of you, which illustrates this concept.",
-  "Please take note of the implications of these results, as they will have a significant impact moving forward.",
-  "To summarize what we've discussed so far, here are the key takeaways.",
-  "At this point, I'll open the floor to any questions or comments you may have.",
-  "Next, we'll explore some case studies that exemplify the theories we've just discussed.",
-  "Now that we've reviewed the background, let's move on to the practical applications of this information.",
-  "As we can see from this example, the data supports the theory we've been discussing.",
-  "I encourage you to think critically about the findings and consider how they apply to your own work.",
-  "I'm happy to provide further details on any aspect of this presentation if you'd like to explore it further.",
-  "Let's take a moment to look at this graph, which shows a comparison over time.",
-  "I'd like to emphasize the importance of this particular point, as it is central to the discussion.",
-  "Before we conclude, let's review the main ideas we've covered today.",
-  "Now, I'll walk you through the steps of the process we used in our research.",
-  "Moving forward, we'll focus on the potential impact of these findings in the industry.",
-  "I would like to point out that this trend is not just a short-term observation, but part of a longer-term shift.",
-  "To demonstrate this, I'll show you a few examples that illustrate the concept in action.",
-  "This leads us to our next topic, which is how we can apply these findings to real-world scenarios.",
-  "Now, let's examine the data more closely to understand its broader implications.",
-  "In conclusion, we can say that these results offer valuable insights into the future of the industry.",
-  "I'll now invite my colleague to present the next section, which focuses on the practical implementation.",
-  "To put this in perspective, consider how this change will affect the industry in the coming years.",
-  "It's important to remember that the recommendations we've made are based on thorough analysis and evidence.",
-  "Let's take a step back and look at the bigger picture before diving into the finer details.",
-  "I'll conclude this segment by summarizing the key points and outlining the next steps.",
-  "As we move forward, we'll need to keep in mind the challenges associated with this approach.",
-  "It's clear from the data that this is an area that requires further attention and research.",
-  "Before I finish, I'd like to leave you with one final thought on the matter.",
-  "We'll be taking a short break now before we continue with the next segment of the presentation.",
-  "Let's focus on the critical factors that will determine the success of this initiative.",
-  "As we conclude, I hope you've gained a better understanding of the topic and its relevance.",
-  "I'll finish by sharing some resources that you can use to learn more about the subject.",
-  "Thank you for your attention. I look forward to hearing your feedback and answering any questions you may have.",
-  "In the final part of the presentation, we'll be discussing some challenges and opportunities moving forward.",
-  "I encourage you all to consider how you can apply these insights to your own work or research.",
-  "This brings us to the end of our presentation, and I'm happy to take any questions at this point.",
-  "Let's move on to the next slide, where I'll outline the recommendations based on our findings.",
-  "I hope this presentation has provided you with valuable insights and practical takeaways.",
-  "Now that we've covered the main points, I'll open the floor for any questions you may have.",
-  "As we look ahead, I believe the next steps will be crucial in implementing these ideas effectively.",
-  "Let's wrap up by reviewing the key concepts once again, and then I'll address any remaining questions.",
-  "I'll now take you through the implications of these findings in more detail.",
-  "To conclude, I'd like to thank everyone for their time and attention throughout this presentation.",
-  "With that, I'll pass it back to my colleague, who will take over the next section of the presentation.",
-  "Let's dive into some of the challenges we might face when trying to implement these strategies.",
-  "To finish up, I'll provide an overview of the next steps and how we can move forward from here."
-];
-
-let correctAnswers = 0;
-let totalAttempts = 0;
-let currentSentence = '';
-
-function generateSentence() {
-  currentSentence = templates[Math.floor(Math.random() * templates.length)];
-  hasAnsweredCorrectly = false; // Reset for new sentence
-  
-  // Clear the input and feedback
-  document.getElementById("userInput").value = "";
-  document.getElementById("userInput").disabled = false; // Re-enable input
-  document.getElementById("feedback").textContent = "";
-  document.getElementById("feedback").className = "feedback";
-  document.getElementById("answerDisplay").classList.remove("show");
-  
-  // Re-enable the check button
-  const checkBtn = document.getElementById("checkBtn");
-  checkBtn.disabled = false;
-  checkBtn.textContent = "Check Answer";
-  
-  // Automatically speak the new sentence
-  speakSentence();
-}
-
-function speakSentence() {
-  if (!currentSentence) {
-    currentSentence = document.getElementById("sentenceDisplay").textContent;
-  }
-  
-  window.speechSynthesis.cancel();
-  
-  const utterance = new SpeechSynthesisUtterance(currentSentence);
-  
-  utterance.rate = 0.9;
-  utterance.pitch = 1;
-  utterance.volume = 1;
-  
-  const voices = window.speechSynthesis.getVoices();
-  if (voices.length > 0) {
-    const englishVoice = voices.find(voice => voice.lang.startsWith('en-'));
-    if (englishVoice) {
-      utterance.voice = englishVoice;
-    }
-  }
-  
-  window.speechSynthesis.speak(utterance);
-}
-
-function checkAnswer() {
-  // Prevent checking if already answered correctly
-  if (hasAnsweredCorrectly) {
-    return;
-  }
-  
-  const userInput = document.getElementById("userInput").value.trim().toLowerCase();
-  const correctAnswer = currentSentence.toLowerCase();
-  const feedbackElement = document.getElementById("feedback");
-  const checkBtn = document.getElementById("checkBtn");
-  
-  totalAttempts++;
-  
-  if (userInput === correctAnswer) {
-    correctAnswers++;
-    fiveCorrectCounter++;
-    hasAnsweredCorrectly = true; // Mark as correctly answered
-    
-    feedbackElement.textContent = "🎉 Excellent! That's correct!";
-    feedbackElement.className = "feedback correct";
-    
-    // Disable the check button and input after correct answer
-    checkBtn.disabled = true;
-    checkBtn.textContent = "✓ Correct!";
-    document.getElementById("userInput").disabled = true;
-    
-    if (fiveCorrectCounter === 5) {
-      const randomPokemonId = Math.floor(Math.random() * POKEMON_COUNT) + 1;
-      showPokemonReward(randomPokemonId);
-      fiveCorrectCounter = 0;
-    }
-  } else {
-    feedbackElement.textContent = "Keep trying! Listen again and type what you hear.";
-    feedbackElement.className = "feedback incorrect";
-  }
-  
-  document.getElementById("correctScore").textContent = correctAnswers;
-  document.getElementById("totalAttempts").textContent = totalAttempts;
-  document.getElementById("percentageScore").textContent = 
-    Math.round((correctAnswers / totalAttempts) * 100);
-}
-
-function showAnswer() {
-  const answerDisplay = document.getElementById("answerDisplay");
-  answerDisplay.textContent = currentSentence;
-  answerDisplay.classList.add("show");
-  
-  setTimeout(() => {
-    answerDisplay.classList.remove("show");
-  }, 5000);
-}
-
-function showPokemonReward(pokemonId) {
-  const modal = document.createElement('div');
-  modal.className = 'pokemon-modal';
-  modal.innerHTML = `
-    <div class="pokemon-modal-content">
-      <h2>Congratulations! 🎉</h2>
-      <p>You've successfully finished five listening dictation tasks. You've won this Pokemon!</p>
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png" 
-           alt="Pokemon reward" 
-           class="pokemon-image"
-           width="200" 
-           height="200">
-      <button onclick="closePokemonModal()" class="continue-btn">Continue Practicing</button>
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <h2>Settings</h2>
+            <div class="setting-group">
+                <label for="sentenceSource">Sentence Bank:</label>
+                <select id="sentenceSource" class="settings-select">
+                    <option value="default">Default (Presentation)</option>
+                    <option value="custom">Custom Sentences</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label for="customSentences">Custom Sentences (one per line):</label>
+                <textarea id="customSentences" class="settings-textarea" 
+                          placeholder="Enter your custom sentences here, one per line"></textarea>
+            </div>
+            <div class="settings-buttons">
+                <button id="saveSettings">Save Settings</button>
+                <button id="closeSettings">Cancel</button>
+            </div>
+        </div>
     </div>
-  `;
-  document.body.appendChild(modal);
-}
-
-function closePokemonModal() {
-  const modal = document.querySelector('.pokemon-modal');
-  if (modal) {
-    modal.remove();
-    generateSentence();
-  }
-}
-
-speechSynthesis.onvoiceschanged = function() {
-  window.speechSynthesis.getVoices();
-};
-
-window.onload = generateSentence;
-</script>
+    <script src="script.js"></script>
+    <!-- Victory Modal -->
+    <div class="modal" id="victoryModal">
+        <div class="modal-content">
+            <h2>Congratulations!</h2>
+            <p>You've completed this sentence unscrambling challenge, and you've won this Pokemon!</p>
+            <div id="pokemonImage"></div>
+            <button onclick="closeModal()">Play Again</button>
+    </div>
+</div>
 </body>
 </html>
