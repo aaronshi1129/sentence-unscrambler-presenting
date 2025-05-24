@@ -211,7 +211,7 @@ button.active {
 }
 
 .settings-select:focus {
-    border-color: #3498db;  /* Blue highlight on focus */
+    border-color: #3498db; 
     outline: none;
 }
 
@@ -274,24 +274,21 @@ button.active {
     transform: translateY(-2px);
 }
 
-/* Add subtle hover states for interactive elements */
 .settings-select:hover,
 .settings-textarea:hover {
     border-color: #3498db;
 }
 
-/* Error state for validation */
 .settings-select.error,
 .settings-textarea.error {
     border-color: #e74c3c;
 }
 
-/* Success state for validation */
 .settings-select.success,
 .settings-textarea.success {
     border-color: #2ecc71;
 }
-/* Victory Modal Styles */
+
 #victoryModal {
     display: none;
     position: fixed;
@@ -342,9 +339,15 @@ button.active {
     background: #2980b9;
     transform: translateY(-2px);
 
-.author-info {
-    text-color: white;
-    }
+.author-info a {
+    color: white; 
+    text-decoration: none; 
+    transition: color 0.3s ease; 
+}
+
+.author-info a:hover {
+    color: lightblue; 
+}
 }
 </style>
 </head>
